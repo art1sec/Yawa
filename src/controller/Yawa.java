@@ -22,23 +22,27 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import model.Settings;
+import owm.Location;
 import owm.OneCallContainer;
 
 public class Yawa {
 
-    private static Path yawaHome;
+    private Path yawaHome;
     private Path lastOwmCall, settingsFile;
-    private static Settings settings;
+    private Settings settings;
     private OneCallContainer occ;
-    private String json, key, urlString;
+    private String json, key;
     private Gson gson;
     private boolean isReady = false;
 
     public static int ZONE;
+    private final static String GEOAPIURL = "http://api.openweathermap.org/geo/1.0/direct?";
+    private final static String OCCAPIURL = "https://api.openweathermap.org/data/2.5/onecall?";
 
     public Yawa() throws IOException {
         
         gson = new Gson();
+        settings = new Settings();
         yawaHome = Paths.get(System.getProperty("user.home")+"/.Yawa");
         
         if(!Files.isDirectory(yawaHome)) {
@@ -61,7 +65,7 @@ public class Yawa {
                 int offset = (tz.getRawOffset()+tz.getDSTSavings()) / 3600000;
                 LocalDateTime fct = LocalDateTime.ofEpochSecond(ft, 0, ZoneOffset.ofHours(offset));
 
-                if(LocalDateTime.now().isAfter(fct.plusMinutes(60))) {
+                if(LocalDateTime.now().isAfter(fct.plusMinutes(20))) {
                     json = callOwmApi();
                 } else {
                     json = getOwmFromFile();
@@ -85,9 +89,9 @@ public class Yawa {
         try {
             
             key = settings.key;
-            urlString = "https://api.openweathermap.org/data/2.5/onecall?"+
-                "lat="+settings.lat+"&lon="+settings.lon+"&units=metric&lang=de&appid="+key;
-            URL url = new URL(urlString);
+            String urlstring = OCCAPIURL+"lat="+settings.lat+
+                "&lon="+settings.lon+"&units=metric&lang=de&appid="+key;
+            URL url = new URL(urlstring);
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             System.out.println("[Yawa] making new API call");
             c.connect();
@@ -106,8 +110,10 @@ public class Yawa {
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
+            System.exit(-2);
         } catch (IOException e) {
             e.printStackTrace();
+            System.exit(-3);
         }
 
         return json;
@@ -161,6 +167,28 @@ public class Yawa {
         occ = gson.fromJson(json, OneCallContainer.class);
         ZONE = occ.timezone_offset / 3600;
         isReady = true;
+
+    }
+
+
+    public Location[] fetchLocations(String q) {
+        String json = "";
+        try {
+            URL url = new URL(GEOAPIURL+"q="+q+"&limit=5&appid="+settings.key);
+            HttpURLConnection c = (HttpURLConnection) url.openConnection();
+            c.connect();
+            InputStream is = c.getInputStream();
+            InputStreamReader reader = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(reader);
+            json = br.readLine();
+            br.close();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Gson gson = new Gson();
+        return gson.fromJson(json, Location[].class);
 
     }
 
