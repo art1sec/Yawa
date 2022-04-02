@@ -8,11 +8,11 @@ import javax.swing.plaf.DimensionUIResource;
 
 import controller.Yawa;
 
-public class YawaUI {
+public class YawaUI extends JFrame {
 
     private Yawa yawa;
 
-    private JFrame frame;
+    private DayPanel dayPanel;
     private MainPanel mainPanel;
     private SettingsPanel settingsPanel;
     
@@ -31,31 +31,44 @@ public class YawaUI {
         UIManager.getLookAndFeelDefaults().put("Button.foreground", Color.white);
         UIManager.getLookAndFeelDefaults().put("TextField.font", DroidSans.load(14));
 
-        frame = new JFrame();
-
     }
 
 
     public void createAndShowGUI() {
 
-        settingsPanel = new SettingsPanel(this, yawa);
+        settingsPanel = new SettingsPanel(this);
         settingsPanel.setVisible(!yawa.isReady());
 
-        mainPanel = new MainPanel(settingsPanel, yawa.isReady());
-        mainPanel.refreshContent(frame, yawa);
-        frame.add(mainPanel);
+        dayPanel = new DayPanel();
+        dayPanel.refreshContent(yawa.getOCC());
+        dayPanel.setVisible(!settingsPanel.isVisible());
 
-        frame.pack();
-        frame.setSize(frame.getWidth(), frame.getHeight());
-        frame.setMinimumSize(new DimensionUIResource(frame.getWidth(), frame.getHeight()));
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        mainPanel = new MainPanel(settingsPanel, dayPanel, yawa.isReady());
+        mainPanel.refreshContent(this);
+        add(mainPanel);
+
+        pack();
+        setSize(getWidth(), getHeight());
+        setMinimumSize(new DimensionUIResource(getWidth(), getHeight()));
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
 
     }
 
 
-    public void refreshContent(Yawa yawa) {
-        mainPanel.refreshContent(frame, yawa);
+    public void refreshContent() {
+        mainPanel.refreshContent(this);
+        dayPanel.refreshContent(yawa.getOCC());
+    }
+
+
+    public void setDayPanelVisible(boolean b) {
+        dayPanel.setVisible(b);
+    }
+
+
+    public Yawa getYawa() {
+        return yawa;
     }
 
 }

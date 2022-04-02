@@ -8,18 +8,15 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.TitledBorder;
 import javax.swing.plaf.DimensionUIResource;
 import javax.swing.plaf.InsetsUIResource;
 
-import controller.Yawa;
+import model.OneCallContainer;
 import model.Settings;
-import owm.OneCallContainer;
 
 public class MainPanel extends JPanel {
 
@@ -32,7 +29,7 @@ public class MainPanel extends JPanel {
     private JLabel currentDetailLabel, currentIconLabel, currentTempLabel;
     private final InsetsUIResource IN0 = new InsetsUIResource(0, 0, 0, 0);
 
-    public MainPanel(JPanel settingsPanel, boolean isReady) {
+    public MainPanel(JPanel settingsPanel, JPanel dayPanel, boolean isReady) {
 
         super();
         setLayout(new GridBagLayout());
@@ -48,6 +45,7 @@ public class MainPanel extends JPanel {
         c.anchor = GridBagConstraints.WEST;
         locationButton = new JButton();
         locationButton.addActionListener(e -> {
+            dayPanel.setVisible(!dayPanel.isVisible());
             settingsPanel.setVisible(!settingsPanel.isVisible());
         });
         locationButton.setFocusable(false);
@@ -119,27 +117,29 @@ public class MainPanel extends JPanel {
         c.insets = IN0;
         c.gridy = 0; c.gridx = 6;
         c.gridwidth = 6; c.gridheight = 5;
+        add(dayPanel, c);
         add(settingsPanel, c);
 
     }
 
 
-    public void refreshContent(JFrame frame, Yawa yawa) {
+    public void refreshContent(YawaUI yawaUI) {
 
         String text;
-        occ = yawa.getOCC();
-        settings = yawa.getSettings();
+        occ = yawaUI.getYawa().getOCC();
+        settings = yawaUI.getYawa().getSettings();
 
-        if(!yawa.isReady() || settings.name.length()<=0) { return; }
+        if(!yawaUI.getYawa().isReady() || settings.name.length()<=0) { return; }
         
-        frame.setTitle("Yet Another Weather App - "+occ.current.getDt()
+        yawaUI.setTitle("Yet Another Weather App - "+occ.current.getDt()
                 .format(DateTimeFormatter.ofPattern("dd.MM. HH:mm")));
         
         locationButton.setText(settings.name+", "+
             settings.country+((settings.state.length()>0)?(", "+settings.state):""));
         locationButton.setVisible(true);
 
-        currentIconLabel.setIcon(getIcon(occ.current.getWeather()[0].getId()));
+        currentIconLabel.setIcon(new WeatherIcon(occ.current.getWeather()[0].getId(),
+            isDaylight(occ.current.getDt()), 0));
 
         text = "<html><style>td {text-align:right;}</style>"+
             "<table><tr><td></td><td><span style=font-size:120%;>♒</span> " +
@@ -157,7 +157,8 @@ public class MainPanel extends JPanel {
 
         for(int i=0; i<12; i++) {
             OneCallContainer.Hourly hour = occ.hourly[i];
-            hourIconLabel[i].setIcon(getIcon(hour.getWeather()[0].getId(), 1, hour.getHour()));
+            hourIconLabel[i].setIcon(new WeatherIcon(hour.getWeather()[0].getId(),
+                isDaylight(hour.getHour()), 1));
 
             hourIconLabel[i].setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEmptyBorder(),
@@ -172,117 +173,12 @@ public class MainPanel extends JPanel {
                 hour.getPop()+" <small>%</small></div></html>");
         }
 
-        frame.pack();
-        frame.setSize(frame.getWidth(), frame.getHeight());
-        frame.setMinimumSize(new DimensionUIResource(frame.getWidth(), frame.getHeight()));
+        yawaUI.pack();
+        yawaUI.setSize(yawaUI.getWidth(), yawaUI.getHeight());
+        yawaUI.setMinimumSize(new DimensionUIResource(yawaUI.getWidth(), yawaUI.getHeight()));
 
     }
-
     
-    private ImageIcon getIcon(int id) {
-        return getIcon(id, 0);
-    }
-
-    private ImageIcon getIcon(int id, int size) {
-        return getIcon(id, 0, occ.current.getDt());
-    }
-
-    private ImageIcon getIcon(int id, int size, LocalDateTime t) {
-
-        java.net.URL iconURL;
-
-        LocalDateTime sunrise = occ.current.getSunrise();
-        LocalDateTime sunset = occ.current.getSunset();
-
-        String daylight = "day";
-        if(t.isBefore(sunrise) || t.isAfter(sunset)) {
-            daylight = "night";
-        }
-
-        String path = "/res/png/";
-        if(size>0) { path += "small/"; }
-        
-        switch(id) {
-            /*
-             *   Group 2xx: Thunderstorm
-            */
-            case 200:
-            case 201:
-            case 202:
-            
-            case 210:
-            case 211:
-            case 212:
-            
-            case 221:
-            iconURL = getClass().getResource(path+"thunderstorm.png"); break;
-            
-            case 230:
-            case 231:
-            case 232:
-            iconURL = getClass().getResource(path+"thundershower_"+daylight+".png"); break;
-
-            /*
-             *   Group 5xx: Rain
-            */
-            case 500:
-            iconURL = getClass().getResource(path+"light_rain.png"); break;
-            case 501:
-            iconURL = getClass().getResource(path+"moderate_rain.png"); break;
-            case 502:
-            case 503:
-            case 504:
-            iconURL = getClass().getResource(path+"heavy_rain.png"); break;
-
-            /*
-             *   Group 6xx: Snow
-            */
-            case 600:
-            iconURL = getClass().getResource(path+"light_snow.png"); break;
-            case 601:
-            iconURL = getClass().getResource(path+"snow.png"); break;
-
-            /*
-             *   Group 7xx: Atmosphere
-            */
-            case 701:
-            iconURL = getClass().getResource(path+"mist.png"); break;
-            case 721:
-            iconURL = getClass().getResource(path+"haze_"+daylight+".png"); break;
-
-            /*
-             *   Group 800: Clear
-            */
-            case 800:
-            iconURL = getClass().getResource(path+"clear_"+daylight+".png"); break;
-            
-            /*
-             *   Group 80x: Clouds
-            */
-            case 801:
-            iconURL = getClass().getResource(path+"few_clouds_"+daylight+".png"); break;
-            
-            case 802:
-            iconURL = getClass().getResource(path+"scattered_clouds_"+daylight+".png"); break;
-
-            case 803:
-            iconURL = getClass().getResource(path+"broken_clouds_"+daylight+".png"); break;
-            
-            case 804:
-            iconURL = getClass().getResource(path+"overcast_clouds.png"); break;
-            
-            /*
-             *   default (should'nt ever take place)
-            */
-            default:
-            iconURL = getClass().getResource(path+"na.png");
-        
-        }
-
-        return (new ImageIcon(iconURL));
-
-    }
-
 
     private String getWindDirection(int degree) {
 
@@ -297,6 +193,13 @@ public class MainPanel extends JPanel {
         else direction = "⬇";
         return direction;
 
+    }
+
+
+    private boolean isDaylight(LocalDateTime t) {
+        LocalDateTime sunrise = occ.current.getSunrise();
+        LocalDateTime sunset = occ.current.getSunset();
+        return (t.isAfter(sunrise) && t.isBefore(sunset));
     }
 
 }

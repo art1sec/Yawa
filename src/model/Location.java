@@ -1,4 +1,4 @@
-package owm;
+package model;
 
 public class Location {
 

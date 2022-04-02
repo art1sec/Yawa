@@ -21,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import model.Location;
+import model.OneCallContainer;
 import model.Settings;
-import owm.Location;
-import owm.OneCallContainer;
 
 public class Yawa {
 

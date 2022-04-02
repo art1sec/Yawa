@@ -11,9 +11,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.plaf.InsetsUIResource;
 
-import controller.Yawa;
+import model.Location;
 import model.Settings;
-import owm.Location;
 
 public class SettingsPanel extends JPanel {
 
@@ -21,10 +20,10 @@ public class SettingsPanel extends JPanel {
     private Location[] locations;
     private final InsetsUIResource IN0 = new InsetsUIResource(0, 0, 0, 0);
     
-    public SettingsPanel(YawaUI yawaUI, Yawa yawa) {
+    public SettingsPanel(YawaUI yawaUI) {
 
         super();
-        settings = yawa.getSettings();
+        settings = yawaUI.getYawa().getSettings();
 
         setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -66,7 +65,7 @@ public class SettingsPanel extends JPanel {
 
         inputField.addActionListener(e -> {
             settings.key = inputKeyField.getText();
-            locations = yawa.fetchLocations(inputField.getText());
+            locations = yawaUI.getYawa().fetchLocations(inputField.getText());
             locationBox.removeAllItems();
             for(Location l: locations) {
                 locationBox.addItem(l);
@@ -82,13 +81,14 @@ public class SettingsPanel extends JPanel {
             settings.lat = l.lat;
             settings.lon = l.lon;
             try {
-                yawa.saveSettings(settings);
+                yawaUI.getYawa().saveSettings(settings);
             } catch (IOException e1) {
                 e1.printStackTrace();
                 System.exit(-5);
             }
             setVisible(false);
-            yawaUI.refreshContent(yawa);
+            yawaUI.setDayPanelVisible(true);
+            yawaUI.refreshContent();
         });
 
     }
