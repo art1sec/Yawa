@@ -20,6 +20,7 @@ import model.Settings;
 
 public class MainPanel extends JPanel {
 
+    private int dailyPage;
     private OneCallContainer occ;
     private Settings settings;
 
@@ -29,9 +30,10 @@ public class MainPanel extends JPanel {
     private JLabel currentDetailLabel, currentIconLabel, currentTempLabel;
     private final InsetsUIResource IN0 = new InsetsUIResource(0, 0, 0, 0);
 
-    public MainPanel(JPanel settingsPanel, JPanel dayPanel, boolean isReady) {
+    public MainPanel(SettingsPanel settingsPanel, DayPanel dayPanel, boolean isReady) {
 
         super();
+        dailyPage = 0;
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
@@ -47,6 +49,15 @@ public class MainPanel extends JPanel {
         locationButton.addActionListener(e -> {
             dayPanel.setVisible(!dayPanel.isVisible());
             settingsPanel.setVisible(!settingsPanel.isVisible());
+            // if(!settingsPanel.hasLocation() && settings.name.length()>0) {
+            //     Location l = new Location();
+            //     l.name = settings.name;
+            //     l.country = settings.country;
+            //     l.state = settings.state;
+            //     l.lat = settings.lat;
+            //     l.lon = settings.lon;
+            //     settingsPanel.setLocation(l);
+            // }
         });
         locationButton.setFocusable(false);
         locationButton.setBorderPainted(false);
@@ -89,26 +100,24 @@ public class MainPanel extends JPanel {
         /*
          * 12 hourly forecasts in one row
         */
-        hourIconLabel = new JLabel[12];
-        hourDetailLabel = new JLabel[12];
+        hourIconLabel = new JLabel[24];
+        hourDetailLabel = new JLabel[24];
         myfont = DroidSans.load(16);
         c.gridwidth = 1; c.gridheight = 1;
         c.insets = new InsetsUIResource(0, 8, 0, 8);
         c.anchor = GridBagConstraints.CENTER;
 
-        for(int i=0; i<12; i++) {
+        for(int i = 0; i < 12; i++) {
 
             c.gridy = 5; c.gridx = i;
             hourIconLabel[i] = new JLabel();
             hourIconLabel[i].setFont(myfont);
-            c.anchor = GridBagConstraints.CENTER;
             add(hourIconLabel[i], c);
 
             c.gridy = 6; c.gridx = i;
             hourDetailLabel[i] = new JLabel();
             hourDetailLabel[i].setFont(myfont);
             c.insets = new InsetsUIResource(0, 8, 8, 8);
-            c.anchor = GridBagConstraints.CENTER;
             add(hourDetailLabel[i], c);
             c.insets = new InsetsUIResource(0, 8, 0, 8);
 
@@ -117,8 +126,11 @@ public class MainPanel extends JPanel {
         c.insets = IN0;
         c.gridy = 0; c.gridx = 6;
         c.gridwidth = 6; c.gridheight = 5;
-        add(dayPanel, c);
         add(settingsPanel, c);
+        // c.fill = GridBagConstraints.BOTH;
+        c.ipady = 48;
+        c.anchor = GridBagConstraints.SOUTHEAST;
+        add(dayPanel, c);
 
     }
 
@@ -155,8 +167,9 @@ public class MainPanel extends JPanel {
             occ.current.getFeelsLike()+" °C</div></html>";
         currentTempLabel.setText(text);
 
-        for(int i=0; i<12; i++) {
-            OneCallContainer.Hourly hour = occ.hourly[i];
+        int start = dailyPage * 12;
+        for(int i = 0; i < 12; i++) {
+            OneCallContainer.Hourly hour = occ.hourly[start+i];
             hourIconLabel[i].setIcon(new WeatherIcon(hour.getWeather()[0].getId(),
                 isDaylight(hour.getHour()), 1));
 
@@ -200,6 +213,16 @@ public class MainPanel extends JPanel {
         LocalDateTime sunrise = occ.current.getSunrise();
         LocalDateTime sunset = occ.current.getSunset();
         return (t.isAfter(sunrise) && t.isBefore(sunset));
+    }
+
+
+    public int getDailyPage() {
+        return dailyPage;
+    }
+
+
+    public void setDailyPage(int page) {
+        dailyPage = page;
     }
 
 }

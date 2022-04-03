@@ -60,8 +60,19 @@ public class SettingsPanel extends JPanel {
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new InsetsUIResource(0, 12, 0, 0);
         JButton saveButton = new JButton("Save");
+        saveButton.setBorderPainted(false);
         add(saveButton, gbc);
         gbc.insets = IN0;
+
+        if(settings.name.length()>0) {
+            Location currentLocation = new Location();
+            currentLocation.name = settings.name;
+            currentLocation.country = settings.country;
+            currentLocation.state = settings.state;
+            currentLocation.lat = settings.lat;
+            currentLocation.lon = settings.lon;
+            locationBox.addItem(currentLocation);
+        }
 
         inputField.addActionListener(e -> {
             settings.key = inputKeyField.getText();
@@ -70,10 +81,11 @@ public class SettingsPanel extends JPanel {
             for(Location l: locations) {
                 locationBox.addItem(l);
             }
+            // }
         });
 
         saveButton.addActionListener(e -> {
-            Location l = locations[locationBox.getSelectedIndex()];
+            Location l = (Location)locationBox.getSelectedItem();
             settings.key = inputKeyField.getText();
             settings.name = l.name;
             settings.country = l.country;
@@ -87,9 +99,14 @@ public class SettingsPanel extends JPanel {
                 System.exit(-5);
             }
             setVisible(false);
+            inputField.setText(null);
             yawaUI.setDayPanelVisible(true);
             yawaUI.refreshContent();
         });
 
     }
+
+    // public boolean hasLocation() {
+    //     return (locations.length>0);
+    // }
 }

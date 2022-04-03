@@ -27,6 +27,7 @@ public class YawaUI extends JFrame {
         UIManager.getLookAndFeelDefaults().put("Label.background", new ColorUIResource(42, 42, 42));
         UIManager.getLookAndFeelDefaults().put("Label.foreground", Color.white);
         UIManager.getLookAndFeelDefaults().put("Button.font", DroidSans.load(16));
+        // UIManager.getLookAndFeelDefaults().put("Button.background", Color.darkGray);
         UIManager.getLookAndFeelDefaults().put("Button.background", Color.darkGray);
         UIManager.getLookAndFeelDefaults().put("Button.foreground", Color.white);
         UIManager.getLookAndFeelDefaults().put("TextField.font", DroidSans.load(14));
@@ -39,8 +40,8 @@ public class YawaUI extends JFrame {
         settingsPanel = new SettingsPanel(this);
         settingsPanel.setVisible(!yawa.isReady());
 
-        dayPanel = new DayPanel();
-        dayPanel.refreshContent(yawa.getOCC());
+        dayPanel = new DayPanel(this);
+        // dayPanel.refreshContent(yawa.getOCC());
         dayPanel.setVisible(!settingsPanel.isVisible());
 
         mainPanel = new MainPanel(settingsPanel, dayPanel, yawa.isReady());
@@ -58,7 +59,7 @@ public class YawaUI extends JFrame {
 
     public void refreshContent() {
         mainPanel.refreshContent(this);
-        dayPanel.refreshContent(yawa.getOCC());
+        // dayPanel.refreshContent(yawa.getOCC());
     }
 
 
@@ -69,6 +70,11 @@ public class YawaUI extends JFrame {
 
     public Yawa getYawa() {
         return yawa;
+    }
+
+
+    public MainPanel getMainPanel() {
+        return mainPanel;
     }
 
 }
