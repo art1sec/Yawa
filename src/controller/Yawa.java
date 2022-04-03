@@ -1,7 +1,6 @@
 package controller;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -49,8 +48,8 @@ public class Yawa {
             Files.createDirectories(yawaHome);
         }
 
-        lastOwmCall = Paths.get(yawaHome+"/openweatherOCC.json");
-        settingsFile = Paths.get(yawaHome+"/settings.json");
+        lastOwmCall = Paths.get(yawaHome+"/openweathermap_occ.json");
+        settingsFile = Paths.get(yawaHome+"/yawa_settings.json");
 
         if(Files.exists(settingsFile)) {
 
@@ -109,7 +108,7 @@ public class Yawa {
             fw.write(json);
             fw.flush();
             fw.close();
-            System.out.println("[Yawa] wrote JSON to $yawaHOME/openweatherOCC.json");
+            System.out.println("[Yawa] wrote JSON to $yawaHOME/openweathermap_occ.json");
 
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -127,7 +126,7 @@ public class Yawa {
     public String getSettingsFromFile() {
 
         try {
-            FileReader fr = new FileReader(yawaHome.toFile()+"/settings.json");
+            FileReader fr = new FileReader(settingsFile.toFile());
             BufferedReader br = new BufferedReader(fr);
             json = br.readLine();
             br.close();
@@ -162,7 +161,7 @@ public class Yawa {
         GsonBuilder gb = new GsonBuilder();
         Gson g = gb.create();
         String json = g.toJson(s);
-        FileWriter fw = new FileWriter(new File(yawaHome.toFile()+"/settings.json"));
+        FileWriter fw = new FileWriter(settingsFile.toFile());
         fw.write(json);
         fw.flush();
         fw.close();

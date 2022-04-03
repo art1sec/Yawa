@@ -152,6 +152,7 @@ public class MainPanel extends JPanel {
 
         currentIconLabel.setIcon(new WeatherIcon(occ.current.getWeather()[0].getId(),
             isDaylight(occ.current.getDt()), 0));
+        currentIconLabel.setToolTipText(occ.current.getWeather()[0].getDescription());
 
         text = "<html><style>td {text-align:right;}</style>"+
             "<table><tr><td></td><td><span style=font-size:120%;>♒</span> " +
@@ -172,6 +173,8 @@ public class MainPanel extends JPanel {
             OneCallContainer.Hourly hour = occ.hourly[start+i];
             hourIconLabel[i].setIcon(new WeatherIcon(hour.getWeather()[0].getId(),
                 isDaylight(hour.getHour()), 1));
+
+            hourIconLabel[i].setToolTipText(hour.getWeather()[0].getDescription());
 
             hourIconLabel[i].setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEmptyBorder(),
