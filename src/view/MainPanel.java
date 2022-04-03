@@ -177,7 +177,7 @@ public class MainPanel extends JPanel {
                 BorderFactory.createEmptyBorder(),
                 hour.getHour().format(DateTimeFormatter.ofPattern("HH:mm")),
                 TitledBorder.LEFT, TitledBorder.TOP,
-                DroidSans.load(12),
+                DroidSans.load(14),
                 Color.white));
             
             hourDetailLabel[i].setText("<html><div style=text-align:center><big>"+

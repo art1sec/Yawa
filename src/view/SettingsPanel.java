@@ -56,7 +56,7 @@ public class SettingsPanel extends JPanel {
 
         add(locationBox, gbc);
 
-        gbc.gridy = 0; gbc.gridx = 1; gbc.gridheight = 5;
+        gbc.gridy = 1; gbc.gridx = 1; gbc.gridheight = 4;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.insets = new InsetsUIResource(0, 12, 0, 0);
         JButton saveButton = new JButton("Save");
