@@ -31,6 +31,9 @@ public class YawaUI extends JFrame {
         UIManager.getLookAndFeelDefaults().put("Button.background", Color.darkGray);
         UIManager.getLookAndFeelDefaults().put("Button.foreground", Color.white);
         UIManager.getLookAndFeelDefaults().put("TextField.font", DroidSans.load(14));
+        UIManager.getLookAndFeelDefaults().put("ToolTip.background", Color.darkGray);
+        UIManager.getLookAndFeelDefaults().put("ToolTip.foreground", Color.white);
+        UIManager.getLookAndFeelDefaults().put("ToolTip.font", DroidSans.load(18));
 
     }
 
