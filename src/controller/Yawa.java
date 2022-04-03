@@ -79,6 +79,9 @@ public class Yawa {
             ZONE = occ.timezone_offset / 3600;
             isReady = true;
     
+        } else {
+            settings = new Settings();
+            settings.name = "";
         }
 
     }
