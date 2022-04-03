@@ -38,7 +38,7 @@ public class SettingsPanel extends JPanel {
 
         JTextField inputKeyField = new JTextField(20);
         inputKeyField.setText(settings.key);
-        
+        // inputKeyField.setFocusable(false);
         add(inputKeyField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 2;

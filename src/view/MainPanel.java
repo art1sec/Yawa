@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
@@ -213,9 +214,11 @@ public class MainPanel extends JPanel {
 
 
     private boolean isDaylight(LocalDateTime t) {
-        LocalDateTime sunrise = occ.current.getSunrise();
-        LocalDateTime sunset = occ.current.getSunset();
-        return (t.isAfter(sunrise) && t.isBefore(sunset));
+
+        LocalTime sunrise = occ.current.getSunrise().toLocalTime();
+        LocalTime sunset = occ.current.getSunset().toLocalTime();
+        
+        return (t.toLocalTime().isAfter(sunrise) && t.toLocalTime().isBefore(sunset));
     }
 
 
