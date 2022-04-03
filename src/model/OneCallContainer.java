@@ -81,10 +81,10 @@ public class OneCallContainer {
             return LocalDateTime.ofEpochSecond(dt , 0, ZoneOffset.ofHours(Yawa.ZONE));
         }
         public LocalDateTime getSunrise() {
-            return LocalDateTime.ofEpochSecond(sunrise, 0, ZoneOffset.ofHours(1));
+            return LocalDateTime.ofEpochSecond(sunrise, 0, ZoneOffset.ofHours(Yawa.ZONE));
         }
         public LocalDateTime getSunset() {
-            return LocalDateTime.ofEpochSecond(sunset , 0, ZoneOffset.ofHours(1));
+            return LocalDateTime.ofEpochSecond(sunset , 0, ZoneOffset.ofHours(Yawa.ZONE));
         }
     }
 
