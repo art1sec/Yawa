@@ -10,7 +10,7 @@ public class Location {
 
     @Override
     public String toString() {
-        return name+", "+country+((state.length()>0)?(", "+state):"");
+        return name+", "+country+((state != null)?(", "+state):"");
     }
 
 }

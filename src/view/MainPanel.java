@@ -50,18 +50,10 @@ public class MainPanel extends JPanel {
         locationButton.addActionListener(e -> {
             dayPanel.setVisible(!dayPanel.isVisible());
             settingsPanel.setVisible(!settingsPanel.isVisible());
-            // if(!settingsPanel.hasLocation() && settings.name.length()>0) {
-            //     Location l = new Location();
-            //     l.name = settings.name;
-            //     l.country = settings.country;
-            //     l.state = settings.state;
-            //     l.lat = settings.lat;
-            //     l.lon = settings.lon;
-            //     settingsPanel.setLocation(l);
-            // }
         });
         locationButton.setFocusable(false);
         locationButton.setBorderPainted(false);
+        locationButton.setToolTipText("click to open settings panel");
         locationButton.setVisible(isReady);
         add(locationButton, c);
         c.anchor = GridBagConstraints.CENTER;
@@ -148,7 +140,7 @@ public class MainPanel extends JPanel {
                 .format(DateTimeFormatter.ofPattern("dd.MM. HH:mm")));
         
         locationButton.setText(settings.name+", "+
-            settings.country+((settings.state.length()>0)?(", "+settings.state):""));
+            settings.country+((settings.state != null)?(", "+settings.state):""));
         locationButton.setVisible(true);
 
         currentIconLabel.setIcon(new WeatherIcon(occ.current.getWeather()[0].getId(),
