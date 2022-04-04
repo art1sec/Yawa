@@ -22,7 +22,6 @@ public class DayPanel extends JPanel{
     public DayPanel(YawaUI yawaUI) {
 
         super();
-        // setLayout(new FlowLayout(FlowLayout.CENTER, 8, 0));
         setLayout(new GridBagLayout());
 
         JButton toggleButton = new JButton("o o o");
@@ -31,6 +30,7 @@ public class DayPanel extends JPanel{
         toggleButton.setBorderPainted(false);
         toggleButton.setFocusable(false);
         toggleButton.setFont(DroidSans.load(24));
+        toggleButton.setToolTipText("toggle forecast panel");
         add(toggleButton);
 
         toggleButton.addActionListener(l -> {
