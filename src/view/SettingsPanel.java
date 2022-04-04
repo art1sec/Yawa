@@ -48,12 +48,12 @@ public class SettingsPanel extends JPanel {
 
         gbc.gridy = 3;
         JTextField inputField = new JTextField(20);
+        // inputField.setFocusCycleRoot(true);
         add(inputField, gbc);
 
         gbc.gridy = 4;
         JComboBox<Location> locationBox = new JComboBox<>();
         gbc.fill = GridBagConstraints.HORIZONTAL;
-
         add(locationBox, gbc);
 
         gbc.gridy = 1; gbc.gridx = 1; gbc.gridheight = 4;
@@ -64,7 +64,7 @@ public class SettingsPanel extends JPanel {
         add(saveButton, gbc);
         gbc.insets = IN0;
 
-        if(settings.name.length()>0) {
+        if(settings.name != null) {
             Location currentLocation = new Location();
             currentLocation.name = settings.name;
             currentLocation.country = settings.country;
@@ -81,7 +81,6 @@ public class SettingsPanel extends JPanel {
             for(Location l: locations) {
                 locationBox.addItem(l);
             }
-            // }
         });
 
         saveButton.addActionListener(e -> {
@@ -106,7 +105,4 @@ public class SettingsPanel extends JPanel {
 
     }
 
-    // public boolean hasLocation() {
-    //     return (locations.length>0);
-    // }
-}
+ }

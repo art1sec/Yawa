@@ -63,10 +63,13 @@ public class WeatherIcon extends ImageIcon {
              *   Group 7xx: Atmosphere
             */
             case 701:
-            iconURL = getClass().getResource(path+"mist.png"); break;
+            case 711:
             case 721:
             iconURL = getClass().getResource(path+"haze_"+daylight+".png"); break;
-
+            case 741:
+            iconURL = getClass().getResource(path+"mist.png"); break;
+            case 771:
+            iconURL = getClass().getResource(path+"squalls.png"); break;
             /*
              *   Group 800: Clear
             */
