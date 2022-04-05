@@ -22,6 +22,7 @@ import model.Settings;
 public class MainPanel extends JPanel {
 
     private int dailyPage;
+    private DayPanel dayPanel;
     private OneCallContainer occ;
     private Settings settings;
 
@@ -35,6 +36,7 @@ public class MainPanel extends JPanel {
 
         super();
         dailyPage = 0;
+        this.dayPanel = dayPanel;
         setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
@@ -93,8 +95,8 @@ public class MainPanel extends JPanel {
         /*
          * 12 hourly forecasts in one row
         */
-        hourIconLabel = new JLabel[24];
-        hourDetailLabel = new JLabel[24];
+        hourIconLabel = new JLabel[48];
+        hourDetailLabel = new JLabel[48];
         myfont = DroidSans.load(16);
         c.gridwidth = 1; c.gridheight = 1;
         c.insets = new InsetsUIResource(0, 8, 0, 8);
@@ -121,8 +123,9 @@ public class MainPanel extends JPanel {
         c.gridwidth = 6; c.gridheight = 5;
         add(settingsPanel, c);
         // c.fill = GridBagConstraints.BOTH;
-        c.ipady = 48;
+        // c.ipady = 48;
         c.anchor = GridBagConstraints.SOUTHEAST;
+        c.insets = new InsetsUIResource(0, 0, 24, 0);
         add(dayPanel, c);
 
     }
@@ -135,6 +138,8 @@ public class MainPanel extends JPanel {
         settings = yawaUI.getYawa().getSettings();
 
         if(!yawaUI.getYawa().isReady() || settings.name.length()<=0) { return; }
+
+        dayPanel.setAlert();
         
         yawaUI.setTitle("Yet Another Weather App - "+occ.current.getDt()
                 .format(DateTimeFormatter.ofPattern("dd.MM. HH:mm")));
@@ -146,6 +151,7 @@ public class MainPanel extends JPanel {
         currentIconLabel.setIcon(new WeatherIcon(occ.current.getWeather()[0].getId(),
             isDaylight(occ.current.getDt()), 0));
         currentIconLabel.setToolTipText(occ.current.getWeather()[0].getDescription());
+        
 
         text = "<html><style>td {text-align:right;}</style>"+
             "<table><tr><td></td><td><span style=font-size:120%;>♒</span> " +
@@ -167,14 +173,17 @@ public class MainPanel extends JPanel {
             hourIconLabel[i].setIcon(new WeatherIcon(hour.getWeather()[0].getId(),
                 isDaylight(hour.getHour()), 1));
 
-            hourIconLabel[i].setToolTipText(hour.getWeather()[0].getDescription());
+            String ttString = hour.getHour().format(DateTimeFormatter.ofPattern("cccc"));
+            ttString += " "+hour.getHour().format(DateTimeFormatter.ofPattern("HH"))+" Uhr: ";
+            hourIconLabel[i].setToolTipText(ttString+hour.getWeather()[0].getDescription());
 
+            Color color = dailyPage > 1 ? Color.yellow : Color.white;
             hourIconLabel[i].setBorder(BorderFactory.createTitledBorder(
                 BorderFactory.createEmptyBorder(),
                 hour.getHour().format(DateTimeFormatter.ofPattern("HH:mm")),
                 TitledBorder.LEFT, TitledBorder.TOP,
                 DroidSans.load(14),
-                Color.white));
+                color));
             
             hourDetailLabel[i].setText("<html><div style=text-align:center><big>"+
                 hour.getTemp()+"</big> <small>°C</small><br>"+
@@ -182,9 +191,9 @@ public class MainPanel extends JPanel {
                 hour.getPop()+" <small>%</small></div></html>");
         }
 
-        yawaUI.pack();
-        yawaUI.setSize(yawaUI.getWidth(), yawaUI.getHeight());
-        yawaUI.setMinimumSize(new DimensionUIResource(yawaUI.getWidth(), yawaUI.getHeight()));
+        // yawaUI.pack();
+        // yawaUI.setSize(yawaUI.getWidth(), yawaUI.getHeight());
+        // yawaUI.setMinimumSize(new DimensionUIResource(yawaUI.getWidth(), yawaUI.getHeight()));
 
     }
     

@@ -109,8 +109,18 @@ public class OneCallContainer {
     }
 
     public class Alerts  {
+        private String event;
         private String description;
+        private long start;
+        private long end;
+        public String getEvent() { return event; }
         public String getDescription() { return description; }
+        public LocalDateTime getStart() {
+            return LocalDateTime.ofEpochSecond(start , 0, ZoneOffset.ofHours(Yawa.ZONE));
+        }
+        public LocalDateTime getEnd() {
+            return LocalDateTime.ofEpochSecond(end , 0, ZoneOffset.ofHours(Yawa.ZONE));
+        }
     }
 
     public class Minutely {
