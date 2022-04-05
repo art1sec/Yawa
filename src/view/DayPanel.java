@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.io.UnsupportedEncodingException;
 import java.time.format.DateTimeFormatter;
 
 import javax.swing.BorderFactory;
@@ -115,6 +116,17 @@ public class DayPanel extends JPanel{
                 a.getStart().format(DateTimeFormatter.ofPattern("ccc HH:mm"))+" - "+
                 a.getEnd().format(DateTimeFormatter.ofPattern("ccc HH:mm"))+
                 "</b></p><p>"+a.getDescription()+"</p></body></html>";
+            
+            if(yawaUI.getOs().startsWith("win")) {
+                try {
+                    byte[] bytes = text.getBytes("Windows-1252");
+                    text = new String(bytes, "UTF-8");
+                } catch (UnsupportedEncodingException e1) {
+                    e1.printStackTrace();
+                    System.exit(-1);
+                }
+            }
+            
             warning.setText(text);
             
         }

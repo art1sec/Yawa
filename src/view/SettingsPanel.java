@@ -101,6 +101,7 @@ public class SettingsPanel extends JPanel {
             inputField.setText(null);
             yawaUI.setDayPanelVisible(true);
             yawaUI.refreshContent();
+            yawaUI.pack();
         });
 
     }
