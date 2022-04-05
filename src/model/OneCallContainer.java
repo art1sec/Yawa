@@ -1,7 +1,6 @@
 package model;
 
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 
 import controller.Yawa;
 
@@ -18,32 +17,6 @@ public class OneCallContainer {
         return current;
     }
     
-    public String toString() {
-
-        LocalDateTime dt = LocalDateTime.ofEpochSecond(current.dt, 0, ZoneOffset.ofHours(1));
-        LocalDateTime sunrise = LocalDateTime.ofEpochSecond(current.sunrise, 0, ZoneOffset.ofHours(1));
-        LocalDateTime sunset = LocalDateTime.ofEpochSecond(current.sunset, 0, ZoneOffset.ofHours(1));
-        
-        String output = 
-            "DT: "+dt+"\n"+
-            current.weather[0].description+", "+Math.round(current.temp)+"° ("+
-            Math.round(current.feels_like)+"°), "+current.humidity+"%, "+
-            sunrise.format(DateTimeFormatter.ofPattern("hh:mm"))+" - "+
-            sunset.format(DateTimeFormatter.ofPattern("HH:mm"))+"\n";
-
-        for(Daily day: daily) {
-            LocalDateTime d = LocalDateTime.ofEpochSecond(day.dt, 0, ZoneOffset.ofHours(1));
-            System.out.println(d.format(DateTimeFormatter.ofPattern("dd.MM.")));
-        }
-
-        for(Hourly hour: hourly) {
-            LocalDateTime d = LocalDateTime.ofEpochSecond(hour.dt, 0, ZoneOffset.ofHours(1));
-            System.out.println(d.format(DateTimeFormatter.ofPattern("HH:mm")));
-        }
-
-        return output;
-    }
-
     public class CurrentWeather {
         
         private long dt;
@@ -56,7 +29,7 @@ public class OneCallContainer {
         private double wind_gust;
         private int humidity;
 
-        Weather[] weather;
+        private Weather[] weather;
 
         public class Weather {
 

@@ -1,21 +1,12 @@
 package view;
 
 import java.awt.Color;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.io.UnsupportedEncodingException;
 import java.time.format.DateTimeFormatter;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.border.TitledBorder;
-import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.InsetsUIResource;
 
 import model.OneCallContainer;
@@ -25,7 +16,6 @@ public class DayPanel extends JPanel{
     private int alertPage;
     private YawaUI yawaUI;
     private JButton warning;
-    private JLabel[] dayIconLabel;
 
     public DayPanel(YawaUI yawaUI) {
 
@@ -103,29 +93,12 @@ public class DayPanel extends JPanel{
         if(yawaUI.getYawa().isReady() && yawaUI.getYawa().getOCC().alerts != null) {
             String text = "<html><body width=\"240px\" align=\"left\"><p><b>";
             OneCallContainer.Alerts a = yawaUI.getYawa().getOCC().alerts[alertPage];
-            // for(OneCallContainer.Alerts a: yawaUI.getYawa().getOCC().alerts) {
-            //      String eventText = a.getEvent();
-            //      switch(eventText) {
-            //          case "wind gusts": text += "BOEN";
-            //      default: text = eventText;
-            //      }
-            // }
 
             // if(!a.getEvent().toUpperCase().equals(a.getEvent())) continue;
             text += a.getEvent()+":  "+
                 a.getStart().format(DateTimeFormatter.ofPattern("ccc HH:mm"))+" - "+
                 a.getEnd().format(DateTimeFormatter.ofPattern("ccc HH:mm"))+
                 "</b></p><p>"+a.getDescription()+"</p></body></html>";
-            
-            if(yawaUI.getOs().startsWith("win")) {
-                try {
-                    byte[] bytes = text.getBytes("Windows-1252");
-                    text = new String(bytes, "UTF-8");
-                } catch (UnsupportedEncodingException e1) {
-                    e1.printStackTrace();
-                    System.exit(-1);
-                }
-            }
             
             warning.setText(text);
             

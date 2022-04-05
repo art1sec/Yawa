@@ -10,7 +10,6 @@ import controller.Yawa;
 
 public class YawaUI extends JFrame {
 
-    private String os;
     private Yawa yawa;
 
     private DayPanel dayPanel;
@@ -20,8 +19,6 @@ public class YawaUI extends JFrame {
     public YawaUI(Yawa yawa) {
 
         this.yawa = yawa;
-
-        os = System.getProperty("os.name").toLowerCase();
 
         UIManager.getLookAndFeelDefaults().put("Panel.font", DroidSans.load(14));
         UIManager.getLookAndFeelDefaults().put("Panel.background", new ColorUIResource(42, 42, 42));
@@ -91,11 +88,6 @@ public class YawaUI extends JFrame {
 
     public MainPanel getMainPanel() {
         return mainPanel;
-    }
-
-
-    public String getOs() {
-        return os;
     }
 
 }

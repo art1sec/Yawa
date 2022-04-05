@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -98,7 +99,7 @@ public class Yawa {
             System.out.println("[Yawa] making new API call");
             c.connect();
             InputStream is = c.getInputStream();
-            InputStreamReader reader = new InputStreamReader(is);
+            InputStreamReader reader = new InputStreamReader(is, "UTF-8");
             BufferedReader br = new BufferedReader(reader);
             json = br.readLine();
             br.close();
@@ -174,13 +175,22 @@ public class Yawa {
 
 
     public Location[] fetchLocations(String q) {
+        if(System.getProperty("os.name").toLowerCase().startsWith("win")) {
+            try {
+                System.out.println(q);
+                q = new String(q.getBytes("UTF-8"), "Windows-1252");
+                System.out.println(q);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+        }
         String json = "";
         try {
             URL url = new URL(GEOAPIURL+"q="+q+"&limit=5&appid="+settings.key);
             HttpURLConnection c = (HttpURLConnection) url.openConnection();
             c.connect();
             InputStream is = c.getInputStream();
-            InputStreamReader reader = new InputStreamReader(is);
+            InputStreamReader reader = new InputStreamReader(is, "UTF-8");
             BufferedReader br = new BufferedReader(reader);
             json = br.readLine();
             br.close();
