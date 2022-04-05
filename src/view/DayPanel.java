@@ -98,7 +98,8 @@ public class DayPanel extends JPanel{
 
     public void setAlert() {
         warning.setText(null);
-        if(yawaUI.getYawa().getOCC().alerts != null) {
+
+        if(yawaUI.getYawa().isReady() && yawaUI.getYawa().getOCC().alerts != null) {
             String text = "<html><body width=\"240px\" align=\"left\"><p><b>";
             OneCallContainer.Alerts a = yawaUI.getYawa().getOCC().alerts[alertPage];
             // for(OneCallContainer.Alerts a: yawaUI.getYawa().getOCC().alerts) {
