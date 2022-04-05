@@ -36,7 +36,7 @@ public class Yawa {
     private Settings settings;
     private OneCallContainer occ;
     private String json, key;
-    private boolean hasNetwork = true;
+    private boolean networkAccess = true;
 
     private final static String GEOAPIURL = "http://api.openweathermap.org/geo/1.0/direct?";
     private final static String OCCAPIURL = "https://api.openweathermap.org/data/2.5/onecall?";
@@ -109,7 +109,7 @@ public class Yawa {
             fw.flush();
             fw.close();
             System.out.println("[Yawa] wrote JSON to $yawaHOME/openweathermap_occ.json");
-            hasNetwork = true;
+            networkAccess = true;
 
         } catch (MalformedURLException e) {
             // e.printStackTrace();
@@ -118,7 +118,7 @@ public class Yawa {
         } catch (IOException e) {
             // e.printStackTrace();
             System.out.println("[Yawa] IO exception in Yawa.fetchJsonFromApi");
-            hasNetwork = false;
+            networkAccess = false;
             json = getJsonFromFile();
         }
 
@@ -208,11 +208,13 @@ public class Yawa {
             BufferedReader br = new BufferedReader(reader);
             json = br.readLine();
             br.close();
+            networkAccess = true;
         } catch (MalformedURLException e) {
             // e.printStackTrace();
             System.out.println("[Yawa] malformed URL exception in Yawa.fetchLocations()");
         } catch (IOException e) {
             // e.printStackTrace();
+            networkAccess = false;
             System.out.println("[Yawa] IO exception in Yawa.fetchLocations()");
         }
         Gson gson = new Gson();
@@ -228,6 +230,11 @@ public class Yawa {
 
     public Settings getSettings() {
         return settings;
+    }
+
+
+    public boolean isOnline() {
+        return networkAccess;
     }
 
 }
