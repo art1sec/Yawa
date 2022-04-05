@@ -38,6 +38,16 @@ public class WeatherIcon extends ImageIcon {
             iconURL = getClass().getResource(path+"thundershower_"+daylight+".png"); break;
 
             /*
+             *   Group 3xx: Drizzle
+            */
+            case 300:
+            case 301:
+            case 302:
+            case 310:
+            case 311:
+            case 312:
+
+            /*
              *   Group 5xx: Rain
             */
             case 500:
