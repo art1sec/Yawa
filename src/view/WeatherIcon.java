@@ -12,10 +12,9 @@ public class WeatherIcon extends ImageIcon {
         super();
         java.net.URL iconURL;
 
-        String daylight= isDay?"day":"night";
-
         String path = "/res/png/";
         if(size>0) { path += "small/"; }
+        String daylight= isDay?"day":"night";
         
         switch(id) {
             /*
@@ -46,6 +45,9 @@ public class WeatherIcon extends ImageIcon {
             case 310:
             case 311:
             case 312:
+            case 313:
+            case 314:
+            case 321:
 
             /*
              *   Group 5xx: Rain

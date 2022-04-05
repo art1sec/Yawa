@@ -9,4 +9,8 @@ public class Settings {
     public double lon;
     public String key;
 
+    public String getName() {
+        return name;
+    }
+
 }

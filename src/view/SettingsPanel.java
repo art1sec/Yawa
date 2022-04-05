@@ -2,7 +2,6 @@ package view;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -13,6 +12,7 @@ import javax.swing.plaf.InsetsUIResource;
 
 import model.Location;
 import model.Settings;
+
 
 public class SettingsPanel extends JPanel {
 
@@ -38,7 +38,6 @@ public class SettingsPanel extends JPanel {
 
         JTextField inputKeyField = new JTextField(20);
         inputKeyField.setText(settings.key);
-        // inputKeyField.setFocusable(false);
         add(inputKeyField, gbc);
 
         gbc.gridx = 0; gbc.gridy = 2;
@@ -48,7 +47,6 @@ public class SettingsPanel extends JPanel {
 
         gbc.gridy = 3;
         JTextField inputField = new JTextField(20);
-        // inputField.setFocusCycleRoot(true);
         add(inputField, gbc);
 
         gbc.gridy = 4;
@@ -91,12 +89,7 @@ public class SettingsPanel extends JPanel {
             settings.state = l.state;
             settings.lat = l.lat;
             settings.lon = l.lon;
-            try {
-                yawaUI.getYawa().saveSettings(settings);
-            } catch (IOException e1) {
-                e1.printStackTrace();
-                System.exit(-5);
-            }
+            yawaUI.getYawa().saveSettings(settings);
             setVisible(false);
             inputField.setText(null);
             yawaUI.setDayPanelVisible(true);

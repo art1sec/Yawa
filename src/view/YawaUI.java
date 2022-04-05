@@ -49,25 +49,44 @@ public class YawaUI extends JFrame {
 
     public void createAndShowGUI() {
 
+        boolean displaySettingsPanel = (yawa.getSettings().getName() == null) ? true : false;
+
         settingsPanel = new SettingsPanel(this);
-        settingsPanel.setVisible(!yawa.isReady());
+        settingsPanel.setVisible(displaySettingsPanel);
 
         dayPanel = new DayPanel(this);
         // dayPanel.refreshContent(yawa.getOCC());
-        dayPanel.setVisible(!settingsPanel.isVisible());
+        dayPanel.setVisible(!displaySettingsPanel);
 
-        mainPanel = new MainPanel(settingsPanel, dayPanel, yawa.isReady());
+        mainPanel = new MainPanel(settingsPanel, dayPanel, !displaySettingsPanel);
         mainPanel.refreshContent(this);
         add(mainPanel);
 
+        double scale;
+        if(System.getProperty("os.name").toLowerCase().startsWith("win")) {
+            scale = 1.5;
+        } else {
+            scale = 1;
+        }
+
         pack();
-        setSize(getWidth(), getHeight());
-        setMinimumSize(new DimensionUIResource(getWidth(), getHeight()));
+        setSize((int)Math.round(getWidth()*scale), (int)Math.round(getHeight()*scale));
+        setMinimumSize(new DimensionUIResource((int)Math.round(getWidth()*scale), (int)Math.round(getHeight()*scale)+8));
 
         setLocationByPlatform(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 
+    }
+
+
+    public Yawa getYawa() {
+        return yawa;
+    }
+
+
+    public MainPanel getMainPanel() {
+        return mainPanel;
     }
 
 
@@ -79,16 +98,6 @@ public class YawaUI extends JFrame {
 
     public void setDayPanelVisible(boolean b) {
         dayPanel.setVisible(b);
-    }
-
-
-    public Yawa getYawa() {
-        return yawa;
-    }
-
-
-    public MainPanel getMainPanel() {
-        return mainPanel;
     }
 
 }

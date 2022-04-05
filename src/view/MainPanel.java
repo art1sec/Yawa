@@ -136,7 +136,7 @@ public class MainPanel extends JPanel {
         occ = yawaUI.getYawa().getOCC();
         settings = yawaUI.getYawa().getSettings();
 
-        if(!yawaUI.getYawa().isReady() || settings.name.length()<=0) { return; }
+        if(yawaUI.getYawa().getSettings().getName() == null || settings.name.length()<=0) { return; }
 
         dayPanel.setAlert();
         
