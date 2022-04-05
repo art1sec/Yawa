@@ -62,17 +62,8 @@ public class YawaUI extends JFrame {
         mainPanel.refreshContent(this);
         add(mainPanel);
 
-        double scale;
-        if(System.getProperty("os.name").toLowerCase().startsWith("win")) {
-            scale = 1.5;
-        } else {
-            scale = 1;
-        }
-
         pack();
-        setSize((int)Math.round(getWidth()*scale), (int)Math.round(getHeight()*scale));
-        setMinimumSize(new DimensionUIResource((int)Math.round(getWidth()*scale), (int)Math.round(getHeight()*scale)+8));
-
+        setMinimumSize(new DimensionUIResource(getWidth(), getHeight()+8));
         setLocationByPlatform(true);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
